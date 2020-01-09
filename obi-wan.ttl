@@ -71,9 +71,22 @@
 
 
 ###  http://ascend.jdrfnpod.org/core/Quantified_Data_Annotation
-###  Groups data type annotations that qualifies as quantified data
-:Quantified_Data_Item rdf:type owl:Class ;
-       rdfs:label "Quantified data item"^^xsd:string ;
+###  Groups data type annotations that qualifies as quantified experimental data
+###  Terms made subclass of this:
+###  average value
+###  binding datum
+###  center value
+###  background corrected data set
+###  error corrected data set
+###  normalized data set
+###  reduced dimension data set
+###  sequence library feature count data
+###  time sampled measurement data set
+###  measurement datum
+###  quantitative confidence value
+###  
+:Quantified_Experimental_Data rdf:type owl:Class ;
+       rdfs:label "Quantified experimental data"^^xsd:string ;
        rdfs:comment "This class is used as a super class for grouping relevant annotation classes that indicate quantified experimental data."^^xsd:string ;
        rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
 
@@ -139,6 +152,7 @@ obo:IAO_0000102 rdf:type owl:Class ;
 obo:IAO_0000109 rdf:type owl:Class ;
                 rdfs:label "measurement datum"@en ;
                 rdfs:subClassOf obo:IAO_0000027 ;
+                rdfs:subClassOf :Quantified_Data_Item ;
                 obo:IAO_0000115 "A measurement datum is an information content entity that is a recording of the output of a measurement such as produced by a device."@en ;
                 obo:IAO_0000112 "Examples of measurement data are the recoding of the weight of a mouse as {40,mass,\"grams\"}, the recording of an observation of the behavior of the mouse {,process,\"agitated\"}, the recording of the expression level of a gene as measured through the process of microarray experiment {3.4,luminosity,}."@en ;
                 obo:IAO_0000412 obo:obi.owl .
