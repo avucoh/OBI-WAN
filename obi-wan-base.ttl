@@ -1,0 +1,447 @@
+@prefix : <http://ascend.jdrfnpod.org/core/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix go: <http://purl.obolibrary.org/obo/go#> .
+@prefix gr: <http://purl.org/goodrelations/v1#> .
+@prefix hp: <http://purl.obolibrary.org/obo/hp#> .
+@prefix ns: <http://www.w3.org/2003/06/sw-vocab-status/ns#> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix chebi: <http://purl.obolibrary.org/obo/chebi/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix efo: <http://www.ebi.ac.uk/efo/> .
+@base <http://ascend.jdrfnpod.org/core/> .
+
+<http://ascend.jdrfnpod.org/core/> a owl:Ontology ;
+                                rdfs:label "Ascend RDF schema ontology" ;
+                                owl:versionInfo "2020_01"^^xsd:string ;
+                                rdfs:comment "Properties and classes used for annotation of Ascend data platform"^^xsd:string .
+
+
+
+#################################################################
+#
+#    Classes
+#
+#################################################################
+
+
+###  http://ascend.jdrfnpod.org/core/nPOD_Data
+:nPOD_Data rdf:type owl:Class ;
+           rdfs:label "nPOD data"^^xsd:string ;
+           rdfs:comment "Denotes that this is some type of nPOD-related data (whether raw, processed, quantified, unquantified, open-access/re-usable or only on the author's computer)."^^xsd:string ;
+           rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/nPOD_Quantified_Data
+###  nPOD data constrained to quantified data 
+:nPOD_Quantified_Data rdf:type owl:Class ;
+                      rdfs:label "nPOD quantified data"^^xsd:string ;
+                      rdfs:subClassOf :nPOD_Data ;
+                      rdfs:comment "Quantified data (as opposed to, for example, non-quantified data like images)."^^xsd:string ;
+                      rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/nPOD_App_Data
+###  The app tries to describe/maintain some record of nPOD-related data but does not necessarily host that data.
+###  Any data that is hosted -- where one can access actual data values because data is stored in the app db -- is considered an instance of this class.
+:nPOD_App_Data rdf:type owl:Class ;
+               owl:disjointWith :External_Data_Representation;
+               rdfs:label "nPOD app data"^^xsd:string ;
+               rdfs:subClassOf :nPOD_Data ;
+               rdfs:comment "A class to denote the subset of nPOD data that actually exists in the application."^^xsd:string ;
+               rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/Annotation
+:Annotation rdf:type owl:Class ;
+            rdfs:label "Annotation"^^xsd:string ;
+            rdfs:comment "Description of resource on a specific topic based on curatorial decisions."^^xsd:string ;            
+            rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/Quantified_Data_Annotation
+###  Groups data type annotations that qualifies as quantified experimental data
+###  Terms made subclass of this:
+###  average value
+###  binding datum
+###  center value
+###  background corrected data set
+###  error corrected data set
+###  normalized data set
+###  reduced dimension data set
+###  sequence library feature count data
+###  time sampled measurement data set
+###  measurement datum
+###  quantitative confidence value
+###  
+:Quantified_Experimental_Data rdf:type owl:Class ;
+       rdfs:label "Quantified experimental data"^^xsd:string ;
+       rdfs:comment "This class is used as a super class for grouping relevant annotation classes that indicate quantified experimental data."^^xsd:string ;
+       rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/Theme
+:Theme rdf:type owl:Class ;
+       rdfs:label "Theme"^^xsd:string ;
+       rdfs:subClassOf :Annotation ;
+       rdfs:comment "Description of an enzyme, transporter and microbial transcription regulation mechanism."^^xsd:string ;
+       rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/Viral_Connection
+:Viral_Connection rdf:type owl:Class ;
+                  rdfs:label "Viral connection"^^xsd:string ;
+                  rdfs:subClassOf :Theme ;
+                  rdfs:comment "Viral theme class, esp. for resources of interest to the nPOD Viral Working Group (nPOD-V)."^^xsd:string ;
+                  rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/Cross_Disease_Connection
+:Cross_Disease_Connection rdf:type owl:Class ;
+                          rdfs:label "Cross-disease connection"^^xsd:string ;
+                          rdfs:subClassOf :Theme ;
+                          rdfs:comment "Theme class for resources that somehow connect two different diseases, e.g. T1D and Cystic Fibrosis."^^xsd:string ;
+                          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/External_Data_Representation
+###  The external data representation can be somewhat different from the app data representation.
+:External_Data_Representation rdf:type owl:Class ;
+                              owl:disjointWith :nPOD_App_Data;
+                              rdfs:label "External data representation"^^xsd:string ;
+                              rdfs:comment "A class to denote that the resource instance is an external data representation, which may be a figure, database record, etc."^^xsd:string ;
+                              rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/Open_Data_Representation
+###  Note: may want to intersect with above class to indicate a specific ext. data representation with re-usable data.
+###  All nPOD_App_Data should automatically be an instance of Open_Data_Representation!
+:Open_Data_Representation rdf:type owl:Class ;
+                          rdfs:label "Open data representation"^^xsd:string ;
+                          rdfs:comment "Indicates a resource that contains a re-usable (operative word) data representation -- this excludes summary figures and PDFs."^^xsd:string ;
+                          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/Method
+:Method rdf:type owl:Class ;
+        rdfs:label "Method"^^xsd:string ;
+        rdfs:comment "A class for curated methods (which are linked to curated data)."^^xsd:string ;
+        rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/Derivation_Method
+:Derivation_Method rdf:type owl:Class ;
+        rdfs:label "Derivation method"^^xsd:string ;
+        rdfs:subClassOf :Method ;
+        rdfs:comment "A type of method that derives new data from existing data (where the input is a specific kind of existing data)."^^xsd:string ;
+        rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/Author_Cite
+:Author_Cite rdf:type owl:Class ;
+             rdfs:label "Author citation"^^xsd:string ;
+             rdfs:comment "The author citation, i.e. Doe_2020, that should be linked to data or methods."^^xsd:string ;
+             rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/Source
+:Source rdf:type owl:Class ;
+        rdfs:label "Source of the data"^^xsd:string ;
+        rdfs:comment "The source is where the data was made known, usually Pubmed."^^xsd:string ;
+        rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/Cell_Tissue_Annotation
+:Cell_Tissue_Annotation rdf:type owl:Class ;
+                        rdfs:subClassOf :Annotation ;
+                        owl:equivalentClass [ rdf:type owl:Class ;
+                                              owl:unionOf  ( obo:CL_0000000 obo:UBERON_0001062 ) 
+                                            ];
+                        rdfs:label "Cell or tissue annotation"^^xsd:string ;
+                        rdfs:comment "Cell or tissue annotation using classes from Cell Ontology or UBERON"^^xsd:string ;
+                        rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/Cell_Tissue_Context_Annotation
+###  Note: may make sense to restrict this to classes from UBERON only
+:Cell_Tissue_Context_Annotation rdf:type owl:Class ;
+                                rdfs:subClassOf :Annotation ;
+                                owl:equivalentClass [ rdf:type owl:Class ;
+                                                      owl:unionOf  ( obo:CL_0000000 obo:UBERON_0001062 ) 
+                                                    ];
+                                rdfs:label "Cell or tissue context annotation"^^xsd:string ;
+                                rdfs:comment "Cell or tissue context annotation using classes from Cell Ontology or UBERON"^^xsd:string ;
+                                rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/EFO_Measurement_Annotation
+###  Many other databases use EFO as a main/significant ontology so EFO annotations might be useful
+:EFO_Measurement_Annotation rdf:type owl:Class ;
+                            rdfs:subClassOf :Annotation ;
+                            owl:equivalentClass efo:EFO_0001444;
+                            rdfs:label "Experimental Factor Ontology measurement annotation"^^xsd:string ;
+                            rdfs:comment "Annotation using a measurement class term from EFO"^^xsd:string ;
+                            rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+#################################################################
+#
+#    Object Properties
+#
+#################################################################
+
+
+##  http://ascend.jdrfnpod.org/core/author
+:author rdf:type owl:ObjectProperty ,
+                 owl:FunctionalProperty ;
+          rdfs:label "Author"^^xsd:string ;
+          rdfs:comment "Links data or method to an author citation."^^xsd:string ;
+          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:range :Author_Cite ;
+          rdfs:domain :nPOD_Data .
+
+
+
+###  http://ascend.jdrfnpod.org/core/cellTissue
+:cellTissue rdf:type owl:ObjectProperty ;
+          rdfs:label "Cell or tissue from which data was derived and is annotated to"^^xsd:string ;
+          rdfs:comment "Links data to the appropriate cell or tissue class."^^xsd:string ;
+          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:range :Cell_Tissue_Annotation ;
+          rdfs:domain :nPOD_Data .
+
+
+
+###  http://ascend.jdrfnpod.org/core/celltissueContext
+:cellTissueContext rdf:type owl:ObjectProperty ;
+          rdfs:label "Cell or tissue context"^^xsd:string ;
+          rdfs:comment "Links data to an upper level anatomical context."^^xsd:string ;
+          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:range :Cell_Tissue_Context_Annotation ;
+          rdfs:domain :nPOD_Data .
+
+
+
+##  http://ascend.jdrfnpod.org/core/hasTheme
+:hasTheme rdf:type owl:ObjectProperty ;
+          rdfs:label "Has theme"^^xsd:string ;
+          rdfs:comment "Links resource (not constrained to data) to a theme."^^xsd:string ;
+          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:range :Theme .
+
+
+
+###  http://ascend.jdrfnpod.org/core/citedMethod
+:citedMethod rdf:type owl:ObjectProperty ;
+          rdfs:label "Cited method"^^xsd:string ;
+          rdfs:comment "Links data to a method that was used to generate that data."^^xsd:string ;
+          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:range :Method ;
+          rdfs:domain :nPOD_Data .
+
+
+
+###  http://ascend.jdrfnpod.org/core/extDataRep
+:extDataRep rdf:type owl:ObjectProperty ;
+            rdfs:label "External data representation"^^xsd:string ;
+            rdfs:comment "Links nPOD data to some representation of it that exists on the web, outside of the nPOD application."^^xsd:string ;
+            rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:range :External_Data_Representation ;
+          rdfs:domain :nPOD_Data .
+
+
+
+###  http://ascend.jdrfnpod.org/core/harmonizableWith
+###  Links data that can be directly combined in the app;
+###  this is calculated by checking that two data resources are linked to the same Method and have the same value unit label.
+:harmonizableWith rdf:type owl:ObjectProperty ;
+                  rdfs:label "Harmonizable with"^^xsd:string ;
+                  rdfs:comment "Indicates that connected data resources can be combined validly."^^xsd:string ;
+                  rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+                  rdfs:range :nPOD_App_Data ;
+                  rdfs:domain :nPOD_App_Data .
+
+
+
+###  http://ascend.jdrfnpod.org/core/derivedFrom
+:derivedFrom rdf:type owl:ObjectProperty ;
+             owl:inverseOf :hasDerivedData;
+             rdfs:label "Derived from"^^xsd:string ;
+             rdfs:comment "Links data that is derived from other data through some method."^^xsd:string ;
+             rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+             rdfs:range :nPOD_Data ;
+             rdfs:domain :nPOD_Data .
+
+
+
+###  http://ascend.jdrfnpod.org/core/hasDerivedData
+:hasDerivedData rdf:type owl:ObjectProperty ;
+                owl:inverseOf :derivedFrom;
+                rdfs:label "Derived from"^^xsd:string ;
+                rdfs:comment "Links (parent) data to derived (descendent) data."^^xsd:string ;
+                rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+                rdfs:range :nPOD_Data ;
+                rdfs:domain :nPOD_Data .
+
+
+
+#################################################################
+#
+#    Data properties
+#
+#################################################################
+
+
+
+###  http://ascend.jdrfnpod.org/core/description
+:description rdf:type owl:DatatypeProperty ,
+                     owl:FunctionalProperty ;     
+      rdfs:label "Description"^^xsd:string ;
+      rdfs:comment "A terse description of the dataset/feature."^^xsd:string ;
+      rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+      rdfs:range xsd:string .
+
+
+
+###  http://ascend.jdrfnpod.org/core/length
+:length rdf:type owl:DatatypeProperty ,
+                 owl:FunctionalProperty ;
+        rdfs:comment "The length of the dataset/feature. For example, a gene expression dataset with 19K expression measurements would have length 19K, while a single feature would count as length 1."^^xsd:string ;
+        rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+        rdfs:domain :nPOD_App_Data ;
+        rdfs:range xsd:int .
+
+
+
+###  http://ascend.jdrfnpod.org/core/valueLabel
+:valueLabel rdf:type owl:DatatypeProperty ,
+                     owl:FunctionalProperty ;     
+      rdfs:label "Value label"^^xsd:string ;
+      rdfs:comment "Value label attached to the data and what would be axes label if data were plotted, e.g. ng/mL."^^xsd:string ;
+      rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+      rdfs:range xsd:string .
+
+
+
+###  http://ascend.jdrfnpod.org/core/inApp
+###  Can be used to infer whether nPOD_Data -> nPOD_App_Data
+:inApp rdf:type owl:DatatypeProperty ,
+                owl:FunctionalProperty ;       
+          rdfs:label "In application"^^xsd:string ;
+          rdfs:comment "True if the object is part of the application/database"^^xsd:string ;
+          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ; 
+          rdfs:domain :nPOD_Data ;
+          rdfs:range xsd:boolean .
+
+
+
+###  http://ascend.jdrfnpod.org/core/openAccess
+###  Note: Not all open access data is nPOD_App_Data (because there are data types we can't put in the app). 
+###  If true, the resource is itself an Open_Data_Representation or linked to an External_Data_Representation that is one.
+:openAccess rdf:type owl:DatatypeProperty ,
+                     owl:FunctionalProperty ;       
+          rdfs:label "Open access"^^xsd:string ;
+          rdfs:comment "True if data is accessible for re-use at some location, not necessarily within the application/database directly."^^xsd:string ;
+          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:domain :nPOD_Data ;
+          rdfs:range xsd:boolean .
+
+
+
+###  http://ascend.jdrfnpod.org/core/linkedCaseID
+:linkedCaseID rdf:type owl:DatatypeProperty ,
+                       owl:FunctionalProperty ;       
+              rdfs:label "Linked to case IDs"^^xsd:string ;
+              rdfs:comment "True if data has been linked to at least some case IDs."^^xsd:string ;
+              rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+              rdfs:domain :nPOD_Data ;
+              rdfs:range xsd:boolean .
+
+
+
+###  http://ascend.jdrfnpod.org/core/created
+:created rdf:type owl:DatatypeProperty ,
+                  owl:FunctionalProperty ;
+         rdfs:comment "The date a resource was created."^^xsd:string ;
+         rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+         rdfs:range xsd:date .
+
+
+
+###  http://ascend.jdrfnpod.org/core/modified
+:modified rdf:type owl:DatatypeProperty ,
+                   owl:FunctionalProperty ;
+          rdfs:comment "The date a resource was last modified."^^xsd:string ;
+          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:range xsd:date .
+
+
+
+###  http://ascend.jdrfnpod.org/core/publicNote
+:publicNote rdf:type owl:DatatypeProperty ;
+      rdfs:label "Public note"^^xsd:string ;
+      rdfs:comment "A public note regarding this resource that can/should be displayed (for curator use)."^^xsd:string ;
+      rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+      rdfs:range xsd:string .
+
+
+
+###  http://ascend.jdrfnpod.org/core/privateNote
+:privateNote rdf:type owl:DatatypeProperty ;
+      rdfs:label "Private note"^^xsd:string ;
+      rdfs:comment "Private note regarding this resource (for developer use)."^^xsd:string ;
+      rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+      rdfs:range xsd:string .
+
+
+
+###  http://ascend.jdrfnpod.org/core/obsolete
+:obsolete rdf:type owl:DatatypeProperty ,
+                   owl:FunctionalProperty ;
+          rdfs:label "obsolete"^^xsd:string ;
+          rdfs:comment "True if this resource has been replaced or deleted."^^xsd:string ;
+          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:range xsd:boolean .
+
+
+
+###  http://ascend.jdrfnpod.org/core/reviewed
+:reviewed rdf:type owl:DatatypeProperty ,
+                   owl:FunctionalProperty ;
+          rdfs:comment "Indicates whether a resource has been reviewed by a curator."^^xsd:string ;
+          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:range xsd:boolean .
+
+
+
+###  http://ascend.jdrfnpod.org/core/version
+:version rdf:type owl:DatatypeProperty ,
+                  owl:FunctionalProperty ;
+         rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+         rdfs:range xsd:int .
+
+
