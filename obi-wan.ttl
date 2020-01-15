@@ -14013,7 +14013,7 @@ obo:OBI_9999994 rdf:type owl:Class ;
 :Theme rdf:type owl:Class ;
        rdfs:label "Theme"^^xsd:string ;
        rdfs:subClassOf :Annotation ;
-       rdfs:comment "Description of an enzyme, transporter and microbial transcription regulation mechanism."^^xsd:string ;
+       rdfs:comment "Description of data in regard to a topic or concept."^^xsd:string ;
        rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
 
 
@@ -14123,6 +14123,41 @@ obo:OBI_9999994 rdf:type owl:Class ;
                             rdfs:comment "Annotation using a measurement class term from EFO"^^xsd:string ;
                             rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
 
+
+
+###  http://ascend.jdrfnpod.org/core/unit_density
+:unit_density rdf:type owl:Class ;
+                   rdfs:subClassOf <http://purl.obolibrary.org/obo/UO_0000182> ; # density unit
+                   rdfs:label "unit density"^^xsd:string ;
+                   rdfs:comment "Represents the average number of individuals or units per space unit."^^xsd:string ;
+                   rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/cell_density_unit
+:cell_density_unit rdf:type owl:Class ;
+                   rdfs:subClassOf :unit_density ; # density unit
+                   rdfs:label "cell density unit"^^xsd:string ;
+                   rdfs:comment "Specific case of unit density when the individuals are cells per some area unit."^^xsd:string ;
+                   rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/cells_per_square_mm
+:cells_per_square_mm rdf:type owl:Class ;
+                     rdfs:subClassOf :unit_density ; # density unit
+                     rdfs:label "cells per square millimeter"^^xsd:string ;
+                     rdfs:comment "Count of cells per square millimeter (usually of tissue)."^^xsd:string ;
+                     rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+
+
+
+###  http://ascend.jdrfnpod.org/core/cells_per_islet
+:cells_per_islet rdf:type owl:Class ;
+                 # rdfs:subClassOf :cell_unit_density ; need to think about this
+                 rdfs:label "cells per islet"^^xsd:string ;
+                 rdfs:comment "Count of cells per islet"^^xsd:string ;
+                 rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
 
 
 #################################################################
