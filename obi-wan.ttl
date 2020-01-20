@@ -1,4 +1,4 @@
-@prefix : <http://ascend.jdrfnpod.org/core/> .
+@prefix : <http://data.jdrfnpod.org/obiwan/> .
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 @prefix go: <http://purl.obolibrary.org/obo/go#> .
 @prefix gr: <http://purl.org/goodrelations/v1#> .
@@ -16,9 +16,9 @@
 @prefix chebi: <http://purl.obolibrary.org/obo/chebi/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix efo: <http://www.ebi.ac.uk/efo/> .
-@base <http://ascend.jdrfnpod.org/core/> .
+@base <http://data.jdrfnpod.org/obiwan/> .
 
-<http://ascend.jdrfnpod.org/core/> a owl:Ontology ;
+<http://data.jdrfnpod.org/obiwan/> a owl:Ontology ;
                                 rdfs:label "Ascend RDF schema ontology" ;
                                 owl:versionInfo "2020_01"^^xsd:string ;
                                 rdfs:comment "Properties and classes used for annotation of Ascend data platform"^^xsd:string .
@@ -32,25 +32,71 @@
 #################################################################
 
 
-###  http://ascend.jdrfnpod.org/core/nPOD_Data
+### Some institution-specific classes
+
+###  http://data.jdrfnpod.org/obiwan/nPOD_Core
+:nPOD_Core rdf:type owl:Class ;
+           rdfs:label "nPOD Cores"^^xsd:string ;
+           rdfs:comment "See https://www.jdrfnpod.org/about/cores/."^^xsd:string ;
+           rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
+
+
+
+###  http://data.jdrfnpod.org/obiwan/Autoantibody_Core
+:Autoantibody_Core rdf:type owl:Class ;
+                   rdfs:subClassOf :nPOD_Core ;
+           rdfs:label "nPOD Autoantibody Core"^^xsd:string ;
+           rdfs:comment "See https://www.jdrfnpod.org/about/cores/#autoantibody" ;
+           rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
+
+
+
+### http://data.jdrfnpod.org/obiwan/OPP_Core
+:OPP_Core rdf:type owl:Class ;
+          rdfs:subClassOf :nPOD_Core ;
+          rdfs:label "nPOD Organ Processing and Pathology Core"^^xsd:string ;
+          rdfs:comment "See https://www.jdrfnpod.org/about/cores/#oppc" ;
+          rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
+
+
+
+###  http://data.jdrfnpod.org/obiwan/EM_Core
+:EM_Core rdf:type owl:Class ;
+         rdfs:subClassOf :nPOD_Core ;
+         rdfs:label "nPOD Large Scale Electron Microscopy (EM) Core"^^xsd:string ;
+         rdfs:comment "See https://www.jdrfnpod.org/about/cores/#emcore" ;
+         rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
+
+
+
+###  http://data.jdrfnpod.org/obiwan/Data_Core
+:Data_Core rdf:type owl:Class ;
+           rdfs:subClassOf :nPOD_Core ;
+           rdfs:label "nPOD Data Management Core"^^xsd:string ;
+           rdfs:comment "See https://www.jdrfnpod.org/about/cores/#data" ;
+           rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
+
+
+
+###  http://data.jdrfnpod.org/obiwan/nPOD_Data
 :nPOD_Data rdf:type owl:Class ;
            rdfs:label "nPOD data"^^xsd:string ;
            rdfs:comment "Denotes that this is some type of nPOD-related data (whether raw, processed, quantified, unquantified, open-access/re-usable or only on the author's computer)."^^xsd:string ;
-           rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+           rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/nPOD_Quantified_Data
+###  http://data.jdrfnpod.org/obiwan/nPOD_Quantified_Data
 ###  nPOD data constrained to quantified data 
 :nPOD_Quantified_Data rdf:type owl:Class ;
                       rdfs:label "nPOD quantified data"^^xsd:string ;
                       rdfs:subClassOf :nPOD_Data ;
                       rdfs:comment "Quantified data (as opposed to, for example, non-quantified data like images)."^^xsd:string ;
-                      rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+                      rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/nPOD_App_Data
+###  http://data.jdrfnpod.org/obiwan/nPOD_App_Data
 ###  The app tries to describe/maintain some record of nPOD-related data but does not necessarily host that data.
 ###  Any data that is hosted -- where one can access actual data values because data is stored in the app db -- is considered an instance of this class.
 :nPOD_App_Data rdf:type owl:Class ;
@@ -58,19 +104,19 @@
                rdfs:label "nPOD app data"^^xsd:string ;
                rdfs:subClassOf :nPOD_Data ;
                rdfs:comment "A class to denote the subset of nPOD data that actually exists in the application."^^xsd:string ;
-               rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+               rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/Annotation
+###  http://data.jdrfnpod.org/obiwan/Annotation
 :Annotation rdf:type owl:Class ;
             rdfs:label "Annotation"^^xsd:string ;
             rdfs:comment "Description of resource on a specific topic based on curatorial decisions."^^xsd:string ;            
-            rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+            rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/Quantified_Data_Annotation
+###  http://data.jdrfnpod.org/obiwan/Quantified_Data_Annotation
 ###  Groups data type annotations that qualifies as quantified experimental data
 ###  Terms made subclass of this:
 ###  average value
@@ -88,7 +134,7 @@
 :Quantified_Experimental_Data rdf:type owl:Class ;
        rdfs:label "Quantified experimental data"^^xsd:string ;
        rdfs:comment "This class is used as a super class for grouping relevant annotation classes that indicate quantified experimental data."^^xsd:string ;
-       rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+       rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
@@ -421,7 +467,8 @@ obo:OBI_0000451 rdf:type owl:Class ;
                 rdfs:label "normalized data set"@en ;
                 rdfs:subClassOf obo:IAO_0000100 ;
                 obo:IAO_0000115 "A data set that is produced as the output of a normalization data transformation."@en ;
-                obo:IAO_0000412 obo:obi.owl 
+                obo:IAO_0000412 obo:obi.owl .
+
 
 
 ###  http://purl.obolibrary.org/obo/OBI_0000648
@@ -484,7 +531,7 @@ obo:OBI_0000674 rdf:type owl:Class ;
 obo:OBI_0000676 rdf:type owl:Class ;
                 rdfs:label "reduced dimension data set"@en ;
                 rdfs:subClassOf obo:IAO_0000100 ;
-                obo:IAO_0000115 "A data set that is produced as the output of a data vector reduction data transformation and consists of producing a data set which has fewer vectors than the input data set."@en ;
+                obo:IAO_0000115 "A data set that is produced as the output of a data vector reduction data transformation and consists of producing a data setwhat are which has fewer vectors than the input data set."@en ;
                 obo:IAO_0000412 obo:obi.owl .
 
 
@@ -14009,87 +14056,88 @@ obo:OBI_9999994 rdf:type owl:Class ;
 ########################################################################################################################################################################################
 
 
-###  http://ascend.jdrfnpod.org/core/Theme
+###  http://data.jdrfnpod.org/obiwan/Theme
 :Theme rdf:type owl:Class ;
        rdfs:label "Theme"^^xsd:string ;
        rdfs:subClassOf :Annotation ;
        rdfs:comment "Description of data in regard to a topic or concept."^^xsd:string ;
-       rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+       rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/Viral_Connection
+###  http://data.jdrfnpod.org/obiwan/Viral_Connection
 :Viral_Connection rdf:type owl:Class ;
                   rdfs:label "Viral connection"^^xsd:string ;
                   rdfs:subClassOf :Theme ;
                   rdfs:comment "Viral theme class, esp. for resources of interest to the nPOD Viral Working Group (nPOD-V)."^^xsd:string ;
-                  rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+                  rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/Cross_Disease_Connection
+###  http://data.jdrfnpod.org/obiwan/Cross_Disease_Connection
 :Cross_Disease_Connection rdf:type owl:Class ;
                           rdfs:label "Cross-disease connection"^^xsd:string ;
                           rdfs:subClassOf :Theme ;
                           rdfs:comment "Theme class for resources that somehow connect two different diseases, e.g. T1D and Cystic Fibrosis."^^xsd:string ;
-                          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+                          rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/External_Data_Representation
+###  http://data.jdrfnpod.org/obiwan/External_Data_Representation
 ###  The external data representation can be somewhat different from the app data representation.
 :External_Data_Representation rdf:type owl:Class ;
                               owl:disjointWith :nPOD_App_Data;
                               rdfs:label "External data representation"^^xsd:string ;
                               rdfs:comment "A class to denote that the resource instance is an external data representation, which may be a figure, database record, etc."^^xsd:string ;
-                              rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+                              rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/Open_Data_Representation
+###  http://data.jdrfnpod.org/obiwan/Open_Data_Representation
 ###  Note: may want to intersect with above class to indicate a specific ext. data representation with re-usable data.
 ###  All nPOD_App_Data should automatically be an instance of Open_Data_Representation!
 :Open_Data_Representation rdf:type owl:Class ;
                           rdfs:label "Open data representation"^^xsd:string ;
                           rdfs:comment "Indicates a resource that contains a re-usable (operative word) data representation -- this excludes summary figures and PDFs."^^xsd:string ;
-                          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+                          rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/Method
+###  http://data.jdrfnpod.org/obiwan/Method
 :Method rdf:type owl:Class ;
         rdfs:label "Method"^^xsd:string ;
         rdfs:comment "A class for curated methods (which are linked to curated data)."^^xsd:string ;
-        rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+        rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/Derivation_Method
+###  http://data.jdrfnpod.org/obiwan/Derivation_Method
 :Derivation_Method rdf:type owl:Class ;
         rdfs:label "Derivation method"^^xsd:string ;
         rdfs:subClassOf :Method ;
         rdfs:comment "A type of method that derives new data from existing data (where the input is a specific kind of existing data)."^^xsd:string ;
-        rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+        rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/Author_Cite
-:Author_Cite rdf:type owl:Class ;
-             rdfs:label "Author citation"^^xsd:string ;
-             rdfs:comment "The author citation, i.e. Doe_2020, that should be linked to data or methods."^^xsd:string ;
-             rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+###  http://data.jdrfnpod.org/obiwan/Author_Agent
+###  Based on refinement in dcterms vs dc
+:Author_Agent rdf:type owl:Class ;
+             rdfs:label "Author agent"^^xsd:string ;
+             rdfs:comment "The author agent that can be linked to a data or method resource."^^xsd:string ;
+             rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/Source
+###  http://data.jdrfnpod.org/obiwan/Source
 :Source rdf:type owl:Class ;
         rdfs:label "Source of the data"^^xsd:string ;
         rdfs:comment "The source is where the data was made known, usually Pubmed."^^xsd:string ;
-        rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+        rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/Cell_Tissue_Annotation
+###  http://data.jdrfnpod.org/obiwan/Cell_Tissue_Annotation
 :Cell_Tissue_Annotation rdf:type owl:Class ;
                         rdfs:subClassOf :Annotation ;
                         owl:equivalentClass [ rdf:type owl:Class ;
@@ -14097,11 +14145,11 @@ obo:OBI_9999994 rdf:type owl:Class ;
                                             ];
                         rdfs:label "Cell or tissue annotation"^^xsd:string ;
                         rdfs:comment "Cell or tissue annotation using classes from Cell Ontology or UBERON"^^xsd:string ;
-                        rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+                        rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/Cell_Tissue_Context_Annotation
+###  http://data.jdrfnpod.org/obiwan/Cell_Tissue_Context_Annotation
 ###  Note: may make sense to restrict this to classes from UBERON only
 :Cell_Tissue_Context_Annotation rdf:type owl:Class ;
                                 rdfs:subClassOf :Annotation ;
@@ -14110,54 +14158,54 @@ obo:OBI_9999994 rdf:type owl:Class ;
                                                     ];
                                 rdfs:label "Cell or tissue context annotation"^^xsd:string ;
                                 rdfs:comment "Cell or tissue context annotation using classes from Cell Ontology or UBERON"^^xsd:string ;
-                                rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+                                rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/EFO_Measurement_Annotation
+###  http://data.jdrfnpod.org/obiwan/EFO_Measurement_Annotation
 ###  Many other databases use EFO as a main/significant ontology so EFO annotations might be useful
 :EFO_Measurement_Annotation rdf:type owl:Class ;
                             rdfs:subClassOf :Annotation ;
                             owl:equivalentClass efo:EFO_0001444;
                             rdfs:label "Experimental Factor Ontology measurement annotation"^^xsd:string ;
                             rdfs:comment "Annotation using a measurement class term from EFO"^^xsd:string ;
-                            rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+                            rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/unit_density
+###  http://data.jdrfnpod.org/obiwan/unit_density
 :unit_density rdf:type owl:Class ;
                    rdfs:subClassOf <http://purl.obolibrary.org/obo/UO_0000182> ; # density unit
                    rdfs:label "unit density"^^xsd:string ;
                    rdfs:comment "Represents the average number of individuals or units per space unit."^^xsd:string ;
-                   rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+                   rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/cell_density_unit
+###  http://data.jdrfnpod.org/obiwan/cell_density_unit
 :cell_density_unit rdf:type owl:Class ;
                    rdfs:subClassOf :unit_density ; # density unit
                    rdfs:label "cell density unit"^^xsd:string ;
                    rdfs:comment "Specific case of unit density when the individuals are cells per some area unit."^^xsd:string ;
-                   rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+                   rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/cells_per_square_mm
+###  http://data.jdrfnpod.org/obiwan/cells_per_square_mm
 :cells_per_square_mm rdf:type owl:Class ;
                      rdfs:subClassOf :unit_density ; # density unit
                      rdfs:label "cells per square millimeter"^^xsd:string ;
                      rdfs:comment "Count of cells per square millimeter (usually of tissue)."^^xsd:string ;
-                     rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+                     rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 
-###  http://ascend.jdrfnpod.org/core/cells_per_islet
+###  http://data.jdrfnpod.org/obiwan/cells_per_islet
 :cells_per_islet rdf:type owl:Class ;
                  # rdfs:subClassOf :cell_unit_density ; need to think about this
                  rdfs:label "cells per islet"^^xsd:string ;
                  rdfs:comment "Count of cells per islet"^^xsd:string ;
-                 rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> .
+                 rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 #################################################################
@@ -14167,98 +14215,123 @@ obo:OBI_9999994 rdf:type owl:Class ;
 #################################################################
 
 
-##  http://ascend.jdrfnpod.org/core/author
+##  http://data.jdrfnpod.org/obiwan/author
 :author rdf:type owl:ObjectProperty ,
                  owl:FunctionalProperty ;
           rdfs:label "Author"^^xsd:string ;
-          rdfs:comment "Links data or method to an author citation."^^xsd:string ;
-          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
-          rdfs:range :Author_Cite ;
+          rdfs:comment "Links data or method to an author agent."^^xsd:string ;
+          rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
+          rdfs:range :Author_Agent ;
           rdfs:domain :nPOD_Data .
 
 
 
-###  http://ascend.jdrfnpod.org/core/cellTissue
+###  http://data.jdrfnpod.org/obiwan/cellTissue
 :cellTissue rdf:type owl:ObjectProperty ;
           rdfs:label "Cell or tissue from which data was derived and is annotated to"^^xsd:string ;
           rdfs:comment "Links data to the appropriate cell or tissue class."^^xsd:string ;
-          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
           rdfs:range :Cell_Tissue_Annotation ;
           rdfs:domain :nPOD_Data .
 
 
 
-###  http://ascend.jdrfnpod.org/core/celltissueContext
+###  http://data.jdrfnpod.org/obiwan/celltissueContext
 :cellTissueContext rdf:type owl:ObjectProperty ;
           rdfs:label "Cell or tissue context"^^xsd:string ;
           rdfs:comment "Links data to an upper level anatomical context."^^xsd:string ;
-          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
           rdfs:range :Cell_Tissue_Context_Annotation ;
           rdfs:domain :nPOD_Data .
 
 
 
-##  http://ascend.jdrfnpod.org/core/hasTheme
+##  http://data.jdrfnpod.org/obiwan/hasTheme
 :hasTheme rdf:type owl:ObjectProperty ;
           rdfs:label "Has theme"^^xsd:string ;
           rdfs:comment "Links resource (not constrained to data) to a theme."^^xsd:string ;
-          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
           rdfs:range :Theme .
 
 
 
-###  http://ascend.jdrfnpod.org/core/citedMethod
-:citedMethod rdf:type owl:ObjectProperty ;
+###  http://data.jdrfnpod.org/obiwan/fromMethod
+:fromMethod rdf:type owl:ObjectProperty ;
           rdfs:label "Cited method"^^xsd:string ;
-          rdfs:comment "Links data to a method that was used to generate that data."^^xsd:string ;
-          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:comment "Links data to method(s) that was used to generate that data."^^xsd:string ;
+          rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
           rdfs:range :Method ;
           rdfs:domain :nPOD_Data .
 
 
 
-###  http://ascend.jdrfnpod.org/core/extDataRep
+###  http://data.jdrfnpod.org/obiwan/extDataRep
 :extDataRep rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf dcterms:isFormatOf ;
             rdfs:label "External data representation"^^xsd:string ;
             rdfs:comment "Links nPOD data to some representation of it that exists on the web, outside of the nPOD application."^^xsd:string ;
-            rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
-          rdfs:range :External_Data_Representation ;
-          rdfs:domain :nPOD_Data .
+            rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
+            rdfs:range :External_Data_Representation ;
+            rdfs:domain :nPOD_Data .
 
 
 
-###  http://ascend.jdrfnpod.org/core/harmonizableWith
+###  http://data.jdrfnpod.org/obiwan/harmonizableWith
 ###  Links data that can be directly combined in the app;
 ###  this is calculated by checking that two data resources are linked to the same Method and have the same value unit label.
 :harmonizableWith rdf:type owl:ObjectProperty ;
                   rdfs:label "Harmonizable with"^^xsd:string ;
                   rdfs:comment "Indicates that connected data resources can be combined validly."^^xsd:string ;
-                  rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+                  rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
                   rdfs:range :nPOD_App_Data ;
                   rdfs:domain :nPOD_App_Data .
 
 
 
-###  http://ascend.jdrfnpod.org/core/derivedFrom
+###  http://data.jdrfnpod.org/obiwan/derivedFrom
 :derivedFrom rdf:type owl:ObjectProperty ;
              owl:inverseOf :hasDerivedData;
              rdfs:label "Derived from"^^xsd:string ;
              rdfs:comment "Links data that is derived from other data through some method."^^xsd:string ;
-             rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+             rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
              rdfs:range :nPOD_Data ;
              rdfs:domain :nPOD_Data .
 
 
 
-###  http://ascend.jdrfnpod.org/core/hasDerivedData
+###  http://data.jdrfnpod.org/obiwan/hasDerivedData
 :hasDerivedData rdf:type owl:ObjectProperty ;
                 owl:inverseOf :derivedFrom;
                 rdfs:label "Derived from"^^xsd:string ;
                 rdfs:comment "Links (parent) data to derived (descendent) data."^^xsd:string ;
-                rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+                rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
                 rdfs:range :nPOD_Data ;
                 rdfs:domain :nPOD_Data .
 
+
+
+###  http://data.jdrfnpod.org/obiwan/refSource
+:refSource rdf:type owl:ObjectProperty ;
+           rdfs:label "Reference source"^^xsd:string ;
+           rdfs:comment "Links resource to a canonical published source."^^xsd:string ;
+           rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
+           rdfs:range :Source .
+
+
+###  http://data.jdrfnpod.org/obiwan/valueType
+:valueType rdf:type owl:ObjectProperty ;
+           rdfs:label "Value type"^^xsd:string ;
+           rdfs:comment "Links data to a value type defined by an ontology class."^^xsd:string ;
+           rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
+
+
+
+###  http://data.jdrfnpod.org/obiwan/measureType
+###  Links data to a measurement type
+:measureType rdf:type owl:ObjectProperty ;
+           rdfs:label "Value type"^^xsd:string ;
+           rdfs:comment "Links data to a measure type defined by an ontology class."^^xsd:string ;
+           rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
 #################################################################
@@ -14269,131 +14342,186 @@ obo:OBI_9999994 rdf:type owl:Class ;
 
 
 
-###  http://ascend.jdrfnpod.org/core/description
-:description rdf:type owl:DatatypeProperty ,
-                     owl:FunctionalProperty ;     
-      rdfs:label "Description"^^xsd:string ;
-      rdfs:comment "A terse description of the dataset/feature."^^xsd:string ;
-      rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
-      rdfs:range xsd:string .
+###  http://data.jdrfnpod.org/obiwan/description
+:description rdf:type owl:DatatypeProperty ;
+             owl:equivalentProperty dc:description;
+             rdfs:label "Description"^^xsd:string ;
+             rdfs:comment "A terse description of the dataset/feature."^^xsd:string ;
+             rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
+             rdfs:range xsd:string .
 
 
 
-###  http://ascend.jdrfnpod.org/core/length
+###  http://data.jdrfnpod.org/obiwan/authorCite
+###  Used instead of the object property :author when there is no author agent resource(s) to link to, so we have a stand-in general citation string
+:authorCite rdf:type owl:DatatypeProperty ;
+            rdfs:label "Author citation"^^xsd:string ;
+            rdfs:comment "An author citation in abbreviated bibliographic format such as Doe_2020."^^xsd:string ;
+            rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
+            rdfs:range xsd:string .
+
+
+
+###  http://data.jdrfnpod.org/obiwan/length
 :length rdf:type owl:DatatypeProperty ,
                  owl:FunctionalProperty ;
         rdfs:comment "The length of the dataset/feature. For example, a gene expression dataset with 19K expression measurements would have length 19K, while a single feature would count as length 1."^^xsd:string ;
-        rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+        rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
         rdfs:domain :nPOD_App_Data ;
         rdfs:range xsd:int .
 
 
 
-###  http://ascend.jdrfnpod.org/core/valueLabel
+###  http://data.jdrfnpod.org/obiwan/valueLabel
 :valueLabel rdf:type owl:DatatypeProperty ,
                      owl:FunctionalProperty ;     
       rdfs:label "Value label"^^xsd:string ;
       rdfs:comment "Value label attached to the data and what would be axes label if data were plotted, e.g. ng/mL."^^xsd:string ;
-      rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+      rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
       rdfs:range xsd:string .
 
 
 
-###  http://ascend.jdrfnpod.org/core/inApp
+###  http://data.jdrfnpod.org/obiwan/inAppData
 ###  Can be used to infer whether nPOD_Data -> nPOD_App_Data
-:inApp rdf:type owl:DatatypeProperty ,
+:inAppData rdf:type owl:DatatypeProperty ,
                 owl:FunctionalProperty ;       
           rdfs:label "In application"^^xsd:string ;
           rdfs:comment "True if the object is part of the application/database"^^xsd:string ;
-          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ; 
+          rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ; 
           rdfs:domain :nPOD_Data ;
           rdfs:range xsd:boolean .
 
 
 
-###  http://ascend.jdrfnpod.org/core/openAccess
+###  http://data.jdrfnpod.org/obiwan/openAccess
 ###  Note: Not all open access data is nPOD_App_Data (because there are data types we can't put in the app). 
 ###  If true, the resource is itself an Open_Data_Representation or linked to an External_Data_Representation that is one.
 :openAccess rdf:type owl:DatatypeProperty ,
                      owl:FunctionalProperty ;       
           rdfs:label "Open access"^^xsd:string ;
           rdfs:comment "True if data is accessible for re-use at some location, not necessarily within the application/database directly."^^xsd:string ;
-          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
           rdfs:domain :nPOD_Data ;
           rdfs:range xsd:boolean .
 
 
 
-###  http://ascend.jdrfnpod.org/core/linkedCaseID
+###  http://data.jdrfnpod.org/obiwan/linkedCaseID
 :linkedCaseID rdf:type owl:DatatypeProperty ,
                        owl:FunctionalProperty ;       
               rdfs:label "Linked to case IDs"^^xsd:string ;
               rdfs:comment "True if data has been linked to at least some case IDs."^^xsd:string ;
-              rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+              rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
               rdfs:domain :nPOD_Data ;
               rdfs:range xsd:boolean .
 
 
 
-###  http://ascend.jdrfnpod.org/core/created
+###  http://data.jdrfnpod.org/obiwan/created
 :created rdf:type owl:DatatypeProperty ,
                   owl:FunctionalProperty ;
          rdfs:comment "The date a resource was created."^^xsd:string ;
-         rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+         rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
          rdfs:range xsd:date .
 
 
 
-###  http://ascend.jdrfnpod.org/core/modified
+###  http://data.jdrfnpod.org/obiwan/modified
 :modified rdf:type owl:DatatypeProperty ,
                    owl:FunctionalProperty ;
           rdfs:comment "The date a resource was last modified."^^xsd:string ;
-          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
           rdfs:range xsd:date .
 
 
 
-###  http://ascend.jdrfnpod.org/core/publicNote
+###  http://data.jdrfnpod.org/obiwan/publicNote
 :publicNote rdf:type owl:DatatypeProperty ;
       rdfs:label "Public note"^^xsd:string ;
-      rdfs:comment "A public note regarding this resource that can/should be displayed (for curator use)."^^xsd:string ;
-      rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+      rdfs:comment "A public note regarding this resource that can/should be displayed."^^xsd:string ;
+      rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
       rdfs:range xsd:string .
 
 
 
-###  http://ascend.jdrfnpod.org/core/privateNote
+###  http://data.jdrfnpod.org/obiwan/relevantFindingNote
+:relevantFindingNote rdf:type owl:DatatypeProperty ;
+                     rdfs:subPropertyOf :publicNote ;
+                     rdfs:label "Relevant finding note"^^xsd:string ;
+                     rdfs:comment "A relevant finding linked to the data; a conclusion (usually by the authors) based on the given data.R"^^xsd:string ;
+                     rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
+                     rdfs:range xsd:string .
+
+
+
+###  http://data.jdrfnpod.org/obiwan/privateNote
 :privateNote rdf:type owl:DatatypeProperty ;
       rdfs:label "Private note"^^xsd:string ;
       rdfs:comment "Private note regarding this resource (for developer use)."^^xsd:string ;
-      rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+      rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
       rdfs:range xsd:string .
 
 
 
-###  http://ascend.jdrfnpod.org/core/obsolete
+###  http://data.jdrfnpod.org/obiwan/contributedTag
+:contributedTag rdf:type owl:DatatypeProperty ;
+      rdfs:label "Contributed tag"^^xsd:string ;
+      rdfs:comment "A tag contributed by a user that is somehow relevant to the resource."^^xsd:string ;
+      rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
+      rdfs:range xsd:string .  
+
+
+
+###  http://data.jdrfnpod.org/obiwan/obsolete
 :obsolete rdf:type owl:DatatypeProperty ,
                    owl:FunctionalProperty ;
           rdfs:label "obsolete"^^xsd:string ;
           rdfs:comment "True if this resource has been replaced or deleted."^^xsd:string ;
-          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
           rdfs:range xsd:boolean .
 
 
 
-###  http://ascend.jdrfnpod.org/core/reviewed
+###  http://data.jdrfnpod.org/obiwan/reviewed
 :reviewed rdf:type owl:DatatypeProperty ,
                    owl:FunctionalProperty ;
           rdfs:comment "Indicates whether a resource has been reviewed by a curator."^^xsd:string ;
-          rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+          rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
           rdfs:range xsd:boolean .
 
 
 
-###  http://ascend.jdrfnpod.org/core/version
+###  http://data.jdrfnpod.org/obiwan/version
 :version rdf:type owl:DatatypeProperty ,
                   owl:FunctionalProperty ;
-         rdfs:isDefinedBy <http://ascend.jdrfnpod.org/core/> ;
+         rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
          rdfs:range xsd:int .
+
+
+
+###  http://data.jdrfnpod.org/obiwan/inAppName
+:inAppName rdf:type owl:DatatypeProperty ,
+                    owl:FunctionalProperty ;
+         rdfs:comment "The name of the resource in the application."^^xsd:string ;
+         rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> ;
+         rdfs:range xsd:string .    
+
+
+
+#################################################################
+#
+#    Individuals
+#
+#################################################################
+
+
+###  http://data.jdrfnpod.org/obiwan/Kaddis_Lab
+:Kaddis_Lab rdf:type :Data_Core ,
+                     owl:NamedIndividual ,
+                     owl:Thing ;
+            rdfs:label "Kaddis Lab"^^xsd:string ;
+            rdfs:comment "See https://www.jdrfnpod.org/about/cores/#data"^^xsd:string ;
+            rdfs:isDefinedBy <http://data.jdrfnpod.org/obiwan/> .
 
 
