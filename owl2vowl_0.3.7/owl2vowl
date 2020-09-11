@@ -1,0 +1,2 @@
+# Convert ontology to vowl-json
+java -jar owl2vowl.jar -file obi-wan-vis.ttl

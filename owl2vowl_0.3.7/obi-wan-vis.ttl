@@ -1,0 +1,2161 @@
+@prefix : <http://purl.org/net/obi-wan#> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix efo: <http://www.ebi.ac.uk/efo/> .
+
+<http://purl.org/net/obi-wan#> a owl:Ontology ;
+                                 dct:title "Ontology of Biomedical Investigations - with Applications for nPOD (OBI-WAN)" ;
+                                 rdfs:label "Ontology of Biomedical Investigations - with Applications for nPOD (OBI-WAN)" ;
+                                 owl:versionInfo "2020_05"^^xsd:string ;
+                                 dct:description "Properties and classes supplementing the Ontology of Biomedical Investigations (OBI) for application-specific annotation and organization of nPOD data."^^xsd:string ;
+                                 rdfs:comment "Properties and classes supplementing the Ontology of Biomedical Investigations (OBI) for application-specific annotation and organization of nPOD data."^^xsd:string ;
+                                 dct:language "en"^^xsd:language ;
+                                 dct:creator "Anh Nguyet Vu"^^xsd:string ;
+                                 owl:imports <http://www.w3.org/2002/07/owl#> ;
+                                 owl:imports <http://www.w3.org/1999/02/22-rdf-syntax-ns> ;
+                                 owl:imports <http://www.w3.org/2000/01/rdf-schema> ;
+                                 # owl:imports <http://purl.obolibrary.org/obo/obi.owl> ;
+                                 # owl:imports <http://purl.obolibrary.org/obo/stato.owl> ;
+                                 owl:imports <http://purl.obolibrary.org/obo/uo.owl> .
+
+
+#################################################################
+#
+#    Classes
+#
+#################################################################
+
+
+
+### Application classes  ########################################################################################################
+
+###  http://purl.org/net/obi-wan#nPOD_Data
+:nPOD_Data a owl:Class ;
+           rdfs:subClassOf obo:IAO_0000030 ; # information content entity
+           rdfs:label "nPOD data"^^xsd:string ;
+           rdfs:comment "Represents data/info assets that are nPOD-related (whether raw, processed, quantified, unquantified, open-access/re-usable or only on the author's computer)."^^xsd:string ;
+           rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#nPOD_Dataset
+:nPOD_Dataset a owl:Class ;
+              owl:equivalentClass [
+                a owl:Class ;
+                owl:intersectionOf ( :nPOD_Data obo:IAO_0000100 )
+              ];
+             rdfs:label "nPOD dataset"^^xsd:string ;
+             rdfs:comment "nPOD dataset is a collection of nPOD-related items such as a collection of images or measurements."^^xsd:string ;
+             rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#nPOD_Dataset_Item
+:nPOD_Dataset_Item a owl:Class ;
+                   rdfs:subClassOf :nPOD_Data ;
+                   owl:equivalentClass [
+                      a owl:Restriction ;
+                      owl:onProperty dct:isPartOf ;
+                      owl:someValuesFrom :nPOD_Dataset
+                   ];
+                   rdfs:label "nPOD dataset item"^^xsd:string ;
+                   rdfs:comment "Item that is part of a nPOD Dataset, e.g. a single image in an image dataset or a probe measurement value in an expression array."^^xsd:string ;
+                   rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#nPOD_Feature
+:nPOD_Feature a owl:Class ;
+              rdfs:subClassOf :nPOD_Dataset_Item ;
+              rdfs:label "nPOD feature"^^xsd:string ;
+              rdfs:comment "Specific type of nPOD dataset item that can be considered a feature. An image from an image dataset is not a feature, but features (e.g. color, intensity, counts) can be extracted from the image."^^xsd:string ;
+              rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+
+###  http://purl.org/net/obi-wan#nPOD_Quantified_Feature
+:nPOD_Quantified_Feature a owl:Class ;
+                         owl:equivalentClass [
+                           a owl:Class ;
+                           owl:intersectionOf ( :nPOD_Feature :Quantified_Measurement_Datum )
+                         ];
+                         rdfs:label "nPOD quantified feature"^^xsd:string ;
+                         rdfs:comment "Quantified nPOD data feature such as 'age' to distinguish from non-quantified features such as 'race'."^^xsd:string ;
+                         rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#nonQuantified_Measurenent_Datum
+###  This class is primarily used to define quantified measurement datum.
+##  Not all experimental data are available in quantified form. The existence of this class helps define its (more useful) complement, quantified datum.
+###  Note that this class is expected to be redefined as needed, and only attempts to address the problem that terms under
+### "data item"/"measurement datum" in OBI cannot be clearly distinguished as quantitative vs non-quantitative in the ontology.
+###  For example, while most terms and anything under "scalar measurement datum" would be quantitative data,
+###  "categorical measurement datum" and "sequence data" are non-quantitative. For now, we define this needed separation
+###  by saying it's any measurement datum that is explicitly not:
+###  categorical measurement, sequence data, 3D structural organization datum, setting datum
+###  obo:OBI_0000938 obo:OBI_0000973 obo:OBI_0001155 obo:IAO_0000140
+
+:nonQuantified_Measurenent_Datum a owl:Class ;
+                                 rdfs:subClassOf obo:IAO_0000109 ;
+                                 owl:equivalentClass [
+                                    a owl:Class ;
+                                    owl:unionOf ( obo:OBI_0000938 obo:OBI_0000973 obo:OBI_0001155 obo:IAO_0000140 )
+                                 ];
+                                 rdfs:label "Non-quantified measurement datum"^^xsd:string ;
+                                 rdfs:comment "This class collects non-numerical measurement data items."^^xsd:string ;
+                                 rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#Quantified_Measurenent_Datum
+###  Using an equivalentClass defininition can run into trouble if someone else defines new classes under measurement datum
+###  that are nonquantitative that we have not accounted for
+:Quantified_Measurement_Datum a owl:Class ;
+                              rdfs:label "Quantified measurement datum"^^xsd:string ;
+                              rdfs:subClassOf [
+                                a owl:Class ;
+                                owl:intersectionOf ( obo:IAO_0000109 # measurement datum
+                                                     [ a owl:Class ;
+                                                       owl:complementOf :nonQuantified_Measurenent_Datum
+                                                     ] )
+                              ];
+                              rdfs:comment "This class is a refinement that collects quantitative (numeric) data items which can be more immediately used in statistical analysis."^^xsd:string ;
+                              rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#nPOD_App_Data
+:nPOD_App_Data a owl:Class ;
+               rdfs:label "nPOD app data"^^xsd:string ;
+               rdfs:subClassOf :nPOD_Data ;
+               owl:equivalentClass [
+                 a owl:Restriction ;
+                 owl:onProperty  :inApp ;
+                 owl:hasValue :nPOD_DataView
+               ];
+               rdfs:comment "Subset of nPOD data that is available in the official software application DataView."^^xsd:string ;
+               rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#Integrated_Data
+###  Necessary but not sufficient to be Integrated_Data if entity is a data item (dataset) to include two data parts
+###  Instances are explicitly typed as such usually through the property integratedOutput;
+###  still considering other mechanisms of identifying Integrated_Data
+:Integrated_Data a owl:Class ;
+                 rdfs:subClassOf obo:IAO_0000027 ; # data item
+                 rdfs:subClassOf [
+                   a owl:Restriction ;
+                   owl:onProperty :integratedPart ;
+                   owl:minCardinality "2"^^xsd:nonNegativeInteger
+                 ];
+                 rdfs:label "Integrated data"^^xsd:string ;
+                 rdfs:comment "Represents data that was combined from more than one data items."^^xsd:string ;
+                 rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+### Annotation Classes ####################################################################################################################
+
+###  http://purl.org/net/obi-wan#Annotation
+:Annotation a owl:Class ;
+            rdfs:label "Annotation"^^xsd:string ;
+            rdfs:comment "Description of resource on a specific aspect."^^xsd:string ;
+            rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#Theme
+:Theme a owl:Class ;
+       rdfs:label "Theme"^^xsd:string ;
+       rdfs:subClassOf :Annotation ;
+       rdfs:comment "Description of resource in regard to a topic or concept; most themes reflect topics of past and present nPOD working groups."^^xsd:string ;
+       rdfs:seeAlso <https://www.jdrfnpod.org/publications/npod-working-groups/> ;
+       rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#Viral
+:Viral a owl:Class ;
+       rdfs:label "Viral theme"^^xsd:string ;
+       rdfs:subClassOf :Theme ;
+       rdfs:comment "Viral theme class for resources of interest to the nPOD Viral Working Group (nPOD-V)."^^xsd:string ;
+       rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#Autoimmunity
+:Autoimmunity a owl:Class ;
+              rdfs:label "Autoimmunity theme"^^xsd:string ;
+              rdfs:subClassOf :Theme ;
+              rdfs:comment "Autoimmunity theme class for resources of interest to the nPOD Autoimmunity Working Group."^^xsd:string ;
+              rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#Extracellular_Matrix
+:Extracellular_Matrix a owl:Class ;
+                      rdfs:label "Extracellular matrix theme"^^xsd:string ;
+                      rdfs:subClassOf :Theme ;
+                      rdfs:comment "Extracellular matrix theme class for resources of interest to the nPOD Extracellular Matrix Working Group."^^xsd:string ;
+                      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#Transplant
+:Transplant a owl:Class ;
+            rdfs:label "Transplant theme"^^xsd:string ;
+            rdfs:subClassOf :Theme ;
+            rdfs:comment "Transplant theme class for resources of interest to the nPOD Transplant Working Group."^^xsd:string ;
+            rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#Omics
+:Omics a owl:Class ;
+       rdfs:label "Omics theme"^^xsd:string ;
+       rdfs:subClassOf :Theme ;
+       rdfs:comment "Omics theme class for resources of interest to the nPOD Omics Working Group."^^xsd:string ;
+       rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#Cross_Disease
+:Cross_Disease a owl:Class ;
+               rdfs:label "Cross-disease connection theme"^^xsd:string ;
+               rdfs:subClassOf :Theme ;
+               rdfs:comment "Theme class for resources that somehow connect two different diseases, e.g. T1D and Cystic Fibrosis."^^xsd:string ;
+               rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+### Methods annotation classes ###################################################################################################################
+
+
+###  http://purl.org/net/obi-wan#Method_Annotation
+:Method_Annotation a owl:Class ;
+                   rdfs:subClassOf :Annotation ;
+                   rdfs:label "Method annotation"^^xsd:string ;
+                   rdfs:comment "Annotation related to the method(s) used, which can be the type of assay used, the specific method, etc."^^xsd:string ;
+                   rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#Assay
+:Assay a owl:Class ;
+       rdfs:subClassOf :Method_Annotation ;
+       rdfs:label "Assay"^^xsd:string ;
+       rdfs:comment "Class containing assay types."^^xsd:string ;
+       rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#Method
+###  These instances can be at different levels of granularity, such as one method instance that is a single step vs. another that composes together several parts,
+###  more like a pipeline. Methods can be part of other methods. When data is generated from an antibody-staining protocol and then quantified through
+###  a computational feature extraction, there is a composed method that includes these sub-methods. In another paper, someone may use the same staining
+###  protocol but use a different computational method for feature extraction.
+:Method a owl:Class ;
+        rdfs:subClassOf :Method_Annotation ;
+        rdfs:label "Method"^^xsd:string ;
+        rdfs:comment "Instances of a process involved in a stage of scientific data generation, e.g. a laboratory protocol or computational process."^^xsd:string ;
+        rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#Data_Derivation_Method
+:Data_Derivation_Method a owl:Class ;
+                        rdfs:subClassOf :Method ;
+                        rdfs:label "Data derivation method"^^xsd:string ;
+                        rdfs:comment "A method that obtains new data from existing data, e.g. an image-to-feature pipeline. This is intended to distinguish from experimental (a.k.a. wet lab) methods."^^xsd:string ;
+                        rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#Data_Integration_Method
+:Data_Integration_Method a owl:Class ;
+                         rdfs:subClassOf :Data_Derivation_Method ;
+                         rdfs:label "Data integration method"^^xsd:string ;
+                         rdfs:comment "A method that obtains new data through integration of at least two different data items."^^xsd:string ;
+                         rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+### Biological annotation classes ###################################################################################################################
+
+
+###  http://purl.org/net/obi-wan#Biological_Annotation
+:Biological_Annotation a owl:Class ;
+                       rdfs:subClassOf :Annotation ;
+                       rdfs:label "Biological annotation"^^xsd:string ;
+                       rdfs:comment "Annotation related to the biological sample, e.g. donor, cell/tissue type, and other biological contexts."^^xsd:string ;
+                       rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#Donor_Annotation
+:Donor_Annotation a owl:Class ;
+                  rdfs:subClassOf :Biological_Annotation ;
+                  rdfs:label "Donor annotation"^^xsd:string ;
+                  rdfs:comment "Annotation specifying the biological donor."^^xsd:string ;
+                  rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#Cell_Tissue_Annotation
+:Cell_Tissue_Annotation a owl:Class ;
+                        rdfs:subClassOf :Biological_Annotation ;
+                        rdfs:label "Cell or tissue annotation"^^xsd:string ;
+                        rdfs:comment "Cell or tissue annotation."^^xsd:string ;
+                        rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#Cell_Tissue_Context_Annotation
+:Cell_Tissue_Context_Annotation a owl:Class ;
+                                rdfs:subClassOf :Biological_Annotation ;
+                                rdfs:label "Cell or tissue context annotation"^^xsd:string ;
+                                rdfs:comment "Cell or tissue context annotation."^^xsd:string ;
+                                rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#Biological_Process_Annotation
+:Biological_Process_Annotation a owl:Class ;
+                               rdfs:subClassOf :Biological_Annotation ;
+                               rdfs:label "Biological process annotation"^^xsd:string ;
+                               rdfs:comment "Biological process annotation can refer to a regular organism or disease process such as 'apoptosis' or 'cytokine production'."^^xsd:string ;
+                               rdfs:seeAlso obo:GO_0008150 ;
+                               rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+### Data quality/completeness classes ########################################################################################################
+
+###  http://purl.org/net/obi-wan#Data_QC_Annotation
+:Data_QC_Annotation a owl:Class ;
+                    rdfs:subClassOf :Annotation ;
+                    rdfs:label "Data quality or completeness annotation"^^xsd:string ;
+                    rdfs:comment "Superclass for classes that describe data quality and completeness."^^xsd:string ;
+                    rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+###  http://purl.org/net/obi-wan#Case_Completeness
+###  Note that case completeness does not say anything about whether the data is individual-level or pooled.
+:Case_Completeness  a owl:Class ;
+                    rdfs:subClassOf :Data_QC_Annotation ;
+                    rdfs:label "Case completeness"^^xsd:string ;
+                    rdfs:comment "Description of data completeness in regard to the donor cases used."^^xsd:string ;
+                    rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#complete_cases
+:complete_cases a owl:Class ;
+                rdfs:subClassOf :Case_Completeness ;
+                rdfs:label "complete cases"^^xsd:string ;
+                rdfs:comment "Indicates that this is complete data in the sense that all donor case measurements are known and available."^^xsd:string ;
+                rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#incomplete_cases
+:incomplete_cases a owl:Class ;
+                  rdfs:subClassOf :Case_Completeness ;
+                  rdfs:label "incomplete cases"^^xsd:string ;
+                  rdfs:comment "Indicates data is known to be incomplete because not all measured case values are included, e.g. an experiment used 50 cases, but the data for only 40 cases could be linked/made available."^^xsd:string ;
+                  rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#all_incomplete_cases
+:all_incomplete_cases a owl:Class ;
+                  rdfs:subClassOf :incomplete_cases ;
+                  rdfs:label "all incomplete cases"^^xsd:string ;
+                  rdfs:comment "Indicates that none of the data is linked to cases used."^^xsd:string ;
+                  rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#uncertain_case_completeness
+:uncertain_case_completeness a owl:Class ;
+                             rdfs:subClassOf :Case_Completeness ;
+                             rdfs:label "uncertain case completeness"^^xsd:string ;
+                             rdfs:comment "Represents resources where it's uncertain whether this is complete or incomplete data in regard to the donor cases used."^^xsd:string ;
+                             rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+[]  a     owl:AllDisjointClasses ;
+    owl:members  ( :complete_cases  :incomplete_cases :uncertain_case_completeness ) .
+
+
+
+
+###  http://purl.org/net/obi-wan#Data_Grade
+:Data_Grade a owl:Class ;
+            rdfs:subClassOf :Data_QC_Annotation ;
+            rdfs:label "Data grade"^^xsd:string ;
+            rdfs:comment "Superclass for several classes related to data quality."^^xsd:string ;
+            rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#published
+:published a owl:Class ;
+           rdfs:subClassOf :Data_Grade ;
+           rdfs:label "published"^^xsd:string ;
+           rdfs:comment "Published data, which have usually undergone validation and peer review, can be reused with good confidence."^^xsd:string ;
+           rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+##  http://purl.org/net/obi-wan#validated
+:validated a owl:Class ;
+           rdfs:subClassOf :Data_Grade ;
+           rdfs:label "validated"^^xsd:string ;
+           rdfs:comment "Unpublished (or pre-publication) data that is otherwise highly validated and can be reused with good confidence, e.g. much of the nPOD Core data."^^xsd:string ;
+           rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+##  http://purl.org/net/obi-wan#preliminary
+:preliminary a owl:Class ;
+             rdfs:subClassOf :Data_Grade ;
+             rdfs:label "preliminary"^^xsd:string ;
+             rdfs:comment "Unpublished (or pre-publication) data that has been generated using formal methods/acceptable sample size, but additional validation should be considered."^^xsd:string ;
+             rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+##  http://purl.org/net/obi-wan#exploratory
+:exploratory a owl:Class ;
+             rdfs:subClassOf :Data_Grade ;
+             rdfs:label "exploratory"^^xsd:string ;
+             rdfs:comment "Unpublished data generated from more informal methods for initial exploratory purposes."^^xsd:string ;
+             rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#FAIR_Annotation
+:FAIR_Annotation  a owl:Class ;
+                  rdfs:subClassOf :Data_QC_Annotation ;
+                  rdfs:label "FAIR-related annotation"^^xsd:string ;
+                  rdfs:comment "A description of data quality in regard to a FAIR concept."^^xsd:string ;
+                  rdfs:seeAlso <https://www.go-fair.org/fair-principles/> ;
+                  rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#accessible
+:accessible a owl:Class ;
+            rdfs:subClassOf :FAIR_Annotation ;
+            rdfs:label "accessible"^^xsd:string ;
+            rdfs:comment "The data can be accessed by its identifier in a broadly reusable format, i.e. in a FAIR manner."^^xsd:string ;
+            rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#inaccessible
+:inaccessible a owl:Class ;
+              rdfs:subClassOf :FAIR_Annotation ;
+              rdfs:label "inaccessible"^^xsd:string ;
+              rdfs:comment "The data CANNOT be accessed by its identifier in a broadly reusable format."^^xsd:string ;
+              rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+[]  a     owl:AllDisjointClasses ;
+    owl:members  ( :accessible  :inaccessible ) .
+
+
+## TO-DO: formulate and apply classes for data with SD/SEM values under data completeness/quality
+
+## Note 1)
+## Biomedical journals require reporting statistics for a reason.
+## Data variability can result from the underlying process, but can also result from the measurement method,
+## so it gives some indicator of method/data quality.
+
+## Note 2)
+## We can also consider how in agreement a piece of data is with another independent piece of data if
+## we know they are measuring the same process or different processes that are influenced by the same process.
+
+
+###  http://purl.org/net/obi-wan#Data_Statistics
+:Data_With_Statistics a owl:Class ;
+                      rdfs:subClassOf :Data_QC_Annotation ;
+                      rdfs:label "Data with statistics"^^xsd:string ;
+                      rdfs:comment "Data that includes commonly reported statistics that help to describe the data (where such statistics can be calculated and are usually included)."^^xsd:string ;
+                      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#Data_With_SD
+:Data_With_SD a owl:Class ;
+              rdfs:subClassOf :Data_With_Statistics ;
+              owl:equivalentClass  [
+                     a owl:Class ;
+                     owl:intersectionOf  ( [ a owl:Restriction ;
+                                             owl:onProperty :withSD ;
+                                             owl:allValuesFrom obo:STATO_0000237 ]
+                                           [ a owl:Restriction ;
+                                             owl:onProperty :withSD ;
+                                             owl:someValuesFrom obo:STATO_0000237 ]
+                                         )
+                   ];
+            rdfs:label "Data with SD"^^xsd:string ;
+            rdfs:comment "The class of data resources accompanied by summarized standard deviation."^^xsd:string ;
+            rdfs:seeAlso <http://purl.obolibrary.org/obo/STATO_0000237> ;
+            rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#Data_With_SEM
+:Data_With_SEM a owl:Class ;
+               rdfs:subClassOf :Data_With_Statistics ;
+               owl:equivalentClass  [
+                      a owl:Class ;
+                      owl:intersectionOf  ( [ a owl:Restriction ;
+                                              owl:onProperty :withSEM ;
+                                              owl:allValuesFrom obo:STATO_0000037 ]
+                                            [ a owl:Restriction ;
+                                              owl:onProperty :withSEM ;
+                                              owl:someValuesFrom obo:STATO_0000037 ]
+                                          )
+                    ];
+              rdfs:label "Data with SEM"^^xsd:string ;
+              rdfs:comment "The class of data resources accompanied by standard error of the mean."^^xsd:string ;
+              rdfs:seeAlso <http://purl.obolibrary.org/obo/STATO_0000037> ;
+              rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#Data_With_CI
+:Data_With_CI a owl:Class ;
+              rdfs:subClassOf :Data_With_Statistics ;
+              owl:equivalentClass  [
+                      a owl:Class ;
+                      owl:intersectionOf  ( [ a owl:Restriction ;
+                                              owl:onProperty :withCI ;
+                                              owl:allValuesFrom obo:STATO_0000196 ]
+                                            [ a owl:Restriction ;
+                                              owl:onProperty :withCI ;
+                                              owl:someValuesFrom obo:STATO_0000196 ]
+                                          )
+                    ];
+              rdfs:label "Data with confidence interval"^^xsd:string ;
+              rdfs:comment "The class of data resources accompanied by a confidence interval."^^xsd:string ;
+              rdfs:seeAlso <http://purl.obolibrary.org/obo/STATO_0000196> ;
+              rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+
+###  http://purl.org/net/obi-wan#Data_With_IQR
+:Data_With_IQR a owl:Class ;
+               rdfs:subClassOf :Data_With_Statistics ;
+               owl:equivalentClass  [
+                      a owl:Class ;
+                      owl:intersectionOf  ( [ a owl:Restriction ;
+                                              owl:onProperty :withIQR ;
+                                              owl:allValuesFrom obo:STATO_0000164 ]
+                                            [ a owl:Restriction ;
+                                              owl:onProperty :withIQR ;
+                                              owl:someValuesFrom obo:STATO_0000164 ]
+                                          )
+                    ];
+              rdfs:label "Data with IQR"^^xsd:string ;
+              rdfs:comment "The class of data resources accompanied by summarized inter quartile range (IQR)."^^xsd:string ;
+              rdfs:seeAlso <http://purl.obolibrary.org/obo/STATO_0000164> ;
+              rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+### Provenance annotation classes ##########################################################################################################
+
+###  http://purl.org/net/obi-wan#Provenance_Annotation
+:Provenance_Annotation a owl:Class ;
+                       rdfs:subClassOf :Annotation ;
+                       rdfs:label "Provenance annotation"^^xsd:string ;
+                       rdfs:comment "Annotations related to data provenance."^^xsd:string ;
+                       rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#Publication
+:Publication a owl:Class ;
+        rdfs:subClassOf :Provenance_Annotation ;
+        rdfs:label "Publication"^^xsd:string ;
+        rdfs:comment "Publication reference for data, e.g. PubMed/PMC and/or a journal doi."^^xsd:string ;
+        rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#Author
+:Author a owl:Class ;
+        rdfs:subClassOf :Provenance_Annotation ;
+        rdfs:label "Author"^^xsd:string ;
+        rdfs:comment "Primary author of data."^^xsd:string ;
+        rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#Data_Processing_Pipeline
+:Data_Processing_Pipeline a owl:Class ;
+                          rdfs:subClassOf prov:Activity, :Method ;
+                          rdfs:label "Data processing pipeline"^^xsd:string ;
+                          rdfs:comment "A procedural activity involving data transformations."^^xsd:string ;
+                          rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#nPOD_FAIR_Pipeline
+:nPOD_Open_Data_Process a owl:Class ;
+                        rdfs:subClassOf :Data_Processing_Pipeline , :Provenance_Annotation ;
+                        rdfs:label "nPOD open data process"^^xsd:string ;
+                        rdfs:comment "Data processing pipeline specifically for nPOD data, with import and transformation processes dependent on data type and format."^^xsd:string ;
+                        rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+### Measurement Annotation ##############################################################################################
+### includes additional data types and unit classes
+
+
+
+###  http://purl.org/net/obi-wan#ordinal_datum
+###  Adds ordinal data since this is avoided by OBI: https://github.com/obi-ontology/obi/wiki/Data-and-Values#ordinal
+:ordinal_datum a owl:Class ;
+               rdfs:subClassOf obo:IAO_0000109 ;
+               rdfs:label "ordinal datum"^^xsd:string ;
+               rdfs:comment "A piece of data of ordinal type."^^xsd:string ;
+               rdfs:seeAlso <https://en.wikipedia.org/wiki/Ordinal_data> ;
+               rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#binary_datum
+:binary_datum a owl:Class ;
+              rdfs:subClassOf obo:IAO_0000109 ;
+              rdfs:label "binary datum"^^xsd:string ;
+              rdfs:comment "A piece of data of binary type (with only two possible values such as positive/negative). Binary data can be considered a special case of ordinal and nominal data."^^xsd:string ;
+              rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#derived_datum
+:derived_datum a owl:Class ;
+               rdfs:subClassOf obo:IAO_0000027 ;
+               owl:equivalentClass  [
+                    a owl:Restriction ;
+                    owl:onProperty :fromMethod ;
+                    owl:someValuesFrom :Data_Derivation_Method
+               ];
+               rdfs:label "derived datum"^^xsd:string ;
+               rdfs:comment "A piece of data derived from some other data."^^xsd:string ;
+               rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#individual_level_datum
+###  Both individual-level and pooled data can have linked cases.
+:individual_level_datum a owl:Class ;
+                        rdfs:subClassOf obo:IAO_0000109 ;
+                        rdfs:label "individual-level datum"^^xsd:string ;
+                        rdfs:comment "A piece of data where measurement values are reported at the level of the biological individual (i.e. not pooled data)."^^xsd:string ;
+                        rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#pooled_datum
+:pooled_datum a owl:Class ;
+              rdfs:subClassOf obo:IAO_0000109 ;
+              rdfs:label "pooled datum"^^xsd:string ;
+              rdfs:comment "A piece of data where values come from pooled input of multiple biological individuals."^^xsd:string ;
+              rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+[]  a     owl:AllDisjointClasses ;
+    owl:members  ( :individual_level_datum  :pooled_datum ) .
+
+
+
+###  http://purl.org/net/obi-wan#caseID
+:caseID a owl:Class ;
+        rdfs:subClassOf obo:IAO_0000577 , :Donor_Annotation ; # centrally registered identifier symbol
+        rdfs:label "Case ID"^^xsd:string ;
+        rdfs:comment "A case ID assigned by nPOD."^^xsd:string ;
+        rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#cells_per_square_mm
+:cells_per_square_mm a owl:Class ;
+                     rdfs:subClassOf obo:UO_0000051 ; # concentration unit
+                     rdfs:label "cells per square millimeter"^^xsd:string ;
+                     rdfs:comment "Count of cells per square millimeter (usually of tissue)."^^xsd:string ;
+                     rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#cells_per_islet
+###  For datum with this unit, cellTissueContext should be inferred to be islet of Langerhans
+:cells_per_islet a owl:Class ;
+                 rdfs:subClassOf obo:UO_0000051 ;
+                 rdfs:label "cells per islet"^^xsd:string ;
+                 rdfs:comment "Count of cells per islet"^^xsd:string ;
+                 rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+#################################################################
+#
+#    Object Properties
+#
+#################################################################
+
+
+### Provenance annotation properties ###################################################################################################################
+
+##  http://purl.org/net/obi-wan#hasAuthor
+:hasAuthor a owl:ObjectProperty ;
+           rdfs:label "has author"^^xsd:string ;
+           rdfs:comment "Links data or method to the author(s), ideally to ORCID objects (which may not be available). For literal values, the property namedAuthor is used instead."^^xsd:string ;
+           rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+           rdfs:range :Author .
+
+
+
+###  http://purl.org/net/obi-wan#pubSource
+:pubSource a owl:ObjectProperty ;
+           rdfs:label "publication source"^^xsd:string ;
+           rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+           rdfs:range :Publication .
+
+
+
+### Biological annotation properties ###################################################################################################################
+
+###  http://purl.org/net/obi-wan#cellTissue
+:cellTissue a owl:ObjectProperty ;
+            rdfs:label "cell or tissue"^^xsd:string ;
+            rdfs:comment "Links data to the appropriate cell or tissue that was used as input."^^xsd:string ;
+            rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+            rdfs:range :Cell_Tissue_Annotation ;
+            rdfs:domain :nPOD_Data .
+
+
+
+###  http://purl.org/net/obi-wan#celltissueContext
+:cellTissueContext a owl:ObjectProperty ;
+                   rdfs:label "has cell or tissue context"^^xsd:string ;
+                   rdfs:comment "Links data to an upper-level context for the cell/tissue used as input. For example, the cell input could be of type T cell which were isolated from different tissue contexts such as blood, spleen, lymph node, etc."^^xsd:string ;
+                   rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+                   rdfs:range :Cell_Tissue_Context_Annotation ;
+                   rdfs:domain :nPOD_Data .
+
+
+
+###  http://purl.org/net/obi-wan#hasCase
+:hasCase a owl:ObjectProperty ;
+         rdfs:label "has case"^^xsd:string ;
+         rdfs:comment "Links data to donor case ID."^^xsd:string ;
+         rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+         rdfs:domain :nPOD_Data ;
+         rdfs:range :caseID .
+
+
+
+### Data statistics/type annotation properties #######################################################################################################
+
+###  http://purl.org/net/obi-wan#unit
+:unit a owl:ObjectProperty ;
+      rdfs:subPropertyOf obo:IAO_0000039 ; # has measurement unit label
+      rdfs:label "Has unit"^^xsd:string ;
+      rdfs:comment "Links data to a unit type (if applicable) preferentially defined by Unit Ontology."^^xsd:string ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+### Methods annotation properties ###################################################################################################################
+
+###  http://purl.org/net/obi-wan#fromMethod
+:fromMethod a owl:ObjectProperty ;
+            owl:inverseOf :methodOutput ;
+            rdfs:label "from method"^^xsd:string ;
+            rdfs:comment "Links a (data) resource to the specific method(s) used for origination."^^xsd:string ;
+            rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+            rdfs:range :Method .
+
+
+
+
+###  http://purl.org/net/obi-wan#methodOutput
+:methodOutput a owl:ObjectProperty ;
+              owl:inverseOf :fromMethod ;
+              rdfs:label "method output"^^xsd:string ;
+              rdfs:comment "Links a method to (data) resources that came out of it, which can be in different forms."^^xsd:string ;
+              rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+              rdfs:domain :Method .
+
+
+
+
+###  http://purl.org/net/obi-wan#integrationOutput
+###  Example:
+###  <method1> :integrationOutput <intdata1> ;
+###  <intdata1> :integratedPart <A>, <B> ;
+:integrationOutput a owl:ObjectProperty ;
+                   owl:subPropertyOf :methodOutput ;
+                   rdfs:label "integration output"^^xsd:string ;
+                   rdfs:comment "A specific type of method output that links the subject method to an object which is an integrated data resource."^^xsd:string ;
+                   rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+                   rdfs:seeAlso <https://en.wikipedia.org/wiki/Data_integration> ;
+                   rdfs:domain :Data_Integration_Method ;
+                   rdfs:range :Integrated_Data .
+
+
+
+###  http://purl.org/net/obi-wan#integratedPart
+:integratedPart a owl:ObjectProperty ;
+                owl:subPropertyOf dct:hasPart ;
+                rdfs:label "integrated part"^^xsd:string ;
+                rdfs:comment "Relates an integrated data instance to its component parts."^^xsd:string ;
+                rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+                rdfs:seeAlso <https://en.wikipedia.org/wiki/Data_integration> ;
+                rdfs:domain :Integrated_Data .
+
+
+
+###  http://purl.org/net/obi-wan#methodMapping
+###  This is different from the 'mapping' referred to in skos mapping relations (for concepts in different schemes) or physical mapping.
+:methodMapping a owl:ObjectProperty ;
+               rdfs:label "methodMapping"^^xsd:string ;
+               rdfs:comment "Mapping relationship between two methods."^^xsd:string ;
+               rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+               rdfs:domain :Method ;
+               rdfs:range :Method .
+
+
+
+###  http://purl.org/net/obi-wan#claimsMatchesMethod
+###  We hesitate to use owl:sameAs when a method references reusing another method;
+###  see dicussion at http://tw.rpi.edu/media/latest/261.pdf.
+###  Often, when a method was carried out "as previously described" (ref123),
+###  this second instance is following the template of the first instance (ref123)
+###  but still might be somewhat different in several ways (e.g. using different reagents).
+:claimsMatchesMethod a owl:ObjectProperty ;
+                     rdfs:subPropertyOf :methodMapping ;
+                     rdfs:label "claims matches method"^^xsd:string ;
+                     rdfs:comment "Defines a relationship where a method claims to be carried out 'as previously described' with a referenced precedent method."^^xsd:string ;
+                     rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+                     rdfs:domain :Method ;
+                     rdfs:range :Method .
+
+
+
+
+###  http://purl.org/net/obi-wan#matchesMethod
+###  The below relationship can be more readily applied when it's the same lab reusing their method in several different papers.
+###  In most cases we avoid using "same/identical" because it is difficult to assure that
+###  a procedure/assay was the same/substitutable across publications (but within the same publication, we can probably say
+###  the same method was used across controls and experimental group).
+###  Overall, method instances (especially laboratory methods) differ in how easily comparable they are.
+:matchesMethod a owl:SymmetricProperty ;
+               rdfs:subPropertyOf :methodMapping ;
+               rdfs:label "matches method"^^xsd:string ;
+               rdfs:comment "Links methods that are basically the same for the most important purposes; if these methods are linked to data, the data should also be similar unless additional methods were applied."^^xsd:string ;
+               obo:IAO_0000116 "Relationship can be more readily applied when it's the same lab reusing their method in several different papers." ;
+               rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+               rdfs:domain :Method ;
+               rdfs:range :Method .
+
+
+
+
+###  http://purl.org/net/obi-wan#sameMethod
+:sameMethod a owl:SymmetricProperty , owl:TransitiveProperty ;
+            rdfs:subPropertyOf :methodMapping ;
+            rdfs:label "matches method"^^xsd:string ;
+            rdfs:comment "Specifies that two methods are the same. This is difficult to establish unless methods are highly standardized and easily comparable."^^xsd:string ;
+            rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+            rdfs:domain :Method ;
+            rdfs:range :Method .
+
+
+
+
+###  http://purl.org/net/obi-wan#similarMethod
+:similarMethod a owl:SymmetricProperty ;
+               rdfs:subPropertyOf :methodMapping ;
+               rdfs:label "similar method"^^xsd:string ;
+               rdfs:comment "Links methods that are similar and likely to generate similar data (converse not necessarily true since similar data may come from very different methods)."^^xsd:string ;
+               rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+               rdfs:domain :Method ;
+               rdfs:range :Method .
+
+
+
+
+###  http://purl.org/net/obi-wan#combinableWith
+###  This relationship must be manually determined for two data sources.
+###  This defines the most basic integrable relationship.
+:combinableWith a owl:ObjectProperty ;
+                rdfs:label "combinable with"^^xsd:string ;
+                rdfs:comment "Indicates linked resources are of the same type and can be validly and directly combined without needing any further transformations."^^xsd:string ;
+                rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#potentiallyCombinable
+###  (Beta)
+:potentiallyCombinable a owl:ObjectProperty ;
+                       rdfs:label "potentially combinable with"^^xsd:string ;
+                       rdfs:comment "Indicates that the resources can be potentially combined, but this needs to be verified and may require specific transformations."^^xsd:string ;
+                       rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#derivedFrom
+:derivedFrom a owl:ObjectProperty ;
+             owl:inverseOf :hasDerivative ;
+             rdfs:label "derived from"^^xsd:string ;
+             rdfs:comment "Links resource to another resource from which it was derived."^^xsd:string ;
+             rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#hasDerivative
+:hasDerivative a owl:ObjectProperty ;
+               owl:inverseOf :derivedFrom ;
+               rdfs:label "has derivative"^^xsd:string ;
+               rdfs:comment "Links resource to derived resource."^^xsd:string ;
+               rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#assayType
+:assayType a owl:ObjectProperty ;
+           rdfs:label "from assay type"^^xsd:string ;
+           rdfs:comment "Links datasets to assay type defined by OBI."^^xsd:string ;
+           rdfs:range :Assay ;
+           rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+### Data quality/completeness annotation properties ##############################################################################################################
+
+
+###  http://purl.org/net/obi-wan#caseLinkage
+:caseLinkage a owl:ObjectProperty ;
+             rdfs:label "case linkage"^^xsd:string ;
+             rdfs:comment "Linkage relationship of data to donor cases."^^xsd:string ;
+             rdfs:range :Case_Completeness ;
+             rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+###  http://purl.org/net/obi-wan#dataGrade
+:dataGrade a owl:ObjectProperty ;
+           rdfs:label "Data grade"^^xsd:string ;
+           rdfs:comment "Links data to a data grade that can indicate data quality and validity, e.g. published data can be reused with more confidence than exploratory unpublished data."^^xsd:string ;
+           rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+
+###  http://purl.org/net/obi-wan#withSEM
+:withSEM a owl:ObjectProperty ;
+         rdfs:label "with SEM"^^xsd:string ;
+         rdfs:comment "Links data (quantified feature) to calculated standard error of the mean (SEM)."^^xsd:string ;
+         rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+         rdfs:domain :Data_With_SEM ;
+         rdfs:range obo:STATO_0000037 .
+
+
+
+
+###  http://purl.org/net/obi-wan#withSD
+:withSD a owl:ObjectProperty ;
+        rdfs:label "with SD"^^xsd:string ;
+        rdfs:comment "Links data (quantified feature) to calculated standard deviation (SD)."^^xsd:string ;
+        rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+        rdfs:domain :Data_With_SD ;
+        rdfs:range obo:STATO_0000237 .
+
+
+
+###  http://purl.org/net/obi-wan#withIQR
+:withIQR a owl:ObjectProperty ;
+        rdfs:label "with IQR"^^xsd:string ;
+        rdfs:comment "Links data (quantified feature) to a calculated interquartile range."^^xsd:string ;
+        rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+        rdfs:domain :Data_With_IQR ;
+        rdfs:range obo:STATO_0000164 .
+
+
+
+###  http://purl.org/net/obi-wan#withCI
+:withCI a owl:ObjectProperty ;
+        rdfs:label "with confidence interval"^^xsd:string ;
+        rdfs:comment "Links data (quantified feature) to a calculated confidence interval."^^xsd:string ;
+        rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+        rdfs:domain :Data_With_CI ;
+        rdfs:range obo:STATO_0000196 .
+
+
+
+### Application properties ##############################################################################################################
+
+
+###  http://purl.org/net/obi-wan#inApp
+:inApp a owl:ObjectProperty ;
+       rdfs:label "in application"^^xsd:string ;
+       rdfs:comment "Links resource to an application instance. Intended to indicate that the resource is present and explorable in a software application."^^xsd:string ;
+       rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+#################################################################
+#
+#    Data properties
+#
+#################################################################
+
+
+###  http://purl.org/net/obi-wan#
+:version a owl:DatatypeProperty ,
+                  owl:FunctionalProperty ;
+          rdfs:label "version"^^xsd:string ;
+          rdfs:comment "Integer version, differing from commonly used dct:hasVersion which is intended for non-literal values."^^xsd:string ;
+          rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+          rdfs:range xsd:int .
+
+
+
+###  http://purl.org/net/obi-wan#refSource
+:refSource a owl:DatatypeProperty ,
+                    owl:FunctionalProperty ;
+           rdfs:label "ref source"^^xsd:string ;
+           rdfs:comment "Journal text reference such as 'Diabetologia. YYYY MM;v(i):p-p.''"^^xsd:string ;
+           rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+           rdfs:range xsd:string .
+
+
+
+###  http://purl.org/net/obi-wan#pubmedData
+:pubmedDate a owl:DatatypeProperty ,
+                     owl:FunctionalProperty ;
+           rdfs:label "PubMed date"^^xsd:string ;
+           rdfs:comment "PubMed publication date for a referenced resource."^^xsd:string ;
+           rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+           rdfs:range xsd:string .
+
+
+
+###  http://purl.org/net/obi-wan#inCite
+:inCite a owl:DatatypeProperty ,
+                 owl:FunctionalProperty ;
+            rdfs:label "in-text/in-name citation"^^xsd:string ;
+            rdfs:comment "Citation tag similar to a parenthentical format such as Doe_2020, intended to be used in-text or inside extended object names."^^xsd:string ;
+            rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+            rdfs:range xsd:string .
+
+
+
+###  http://purl.org/net/obi-wan#namedAuthor
+:namedAuthor a owl:DatatypeProperty ;
+             rdfs:label "named author"^^xsd:string ;
+             rdfs:comment "Author last name, first initials as provided by a publication database. Authors for a dataset can be enumerated through this property."^^xsd:string ;
+             rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+             rdfs:range xsd:string .
+
+
+
+###  http://purl.org/net/obi-wan#numFeatures
+:numFeatures a owl:DatatypeProperty ,
+                      owl:FunctionalProperty ;
+             rdfs:label "number of features"^^xsd:string ;
+             rdfs:comment "Number of measurement features present in a dataset, excluding IDs/non-measure data (while length property is usually equal to numFeatures + 1). For example, a gene expression dataset with 19K genes would have the value 19K."^^xsd:string ;
+             rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+             rdfs:range xsd:int .
+
+
+
+###  http://purl.org/net/obi-wan#dataPoints
+:dataPoints a owl:DatatypeProperty ,
+                     owl:FunctionalProperty ;
+             rdfs:label "number of data points"^^xsd:string ;
+             rdfs:comment "This is calculated as the total of non-missing and non-ID measurement values for datasets and features."^^xsd:string ;
+             rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+             rdfs:range xsd:int .
+
+
+
+###  http://purl.org/net/obi-wan#unitLabel
+:unitLabel a owl:DatatypeProperty ,
+                    owl:FunctionalProperty ;
+           rdfs:label "unit label"^^xsd:string ;
+           rdfs:comment "Unit label attached to the datum, especially scalar measurement datum."^^xsd:string ;
+           rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+           rdfs:range xsd:string .
+
+
+
+###  http://purl.org/net/obi-wan#inAppName
+:inAppName a owl:DatatypeProperty ,
+                    owl:FunctionalProperty ;
+           rdfs:label "in-app name"^^xsd:string ;
+           rdfs:comment "The name of the resource in the official software application."^^xsd:string ;
+           rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+           rdfs:range xsd:string .
+
+
+
+###  http://purl.org/net/obi-wan#authorNote
+:authorNote a owl:DatatypeProperty ;
+            rdfs:label "author's note"^^xsd:string ;
+            rdfs:comment "Notes provided by contributing author regarding a dataset or feature, which can be used to point out something interesting, qualify some aspect of the data, make suggestions of how to re-use data, etc."^^xsd:string ;
+            rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+            rdfs:range xsd:string .
+
+
+
+###  http://purl.org/net/obi-wan#curatorNote
+:curatorNote a owl:DatatypeProperty ;
+             rdfs:label "curator's note"^^xsd:string ;
+             rdfs:comment "Notes provided by the curator regarding a dataset or feature."^^xsd:string ;
+             rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+             rdfs:range xsd:string .
+
+
+
+###  http://purl.org/net/obi-wan#tag
+:tag a owl:DatatypeProperty ;
+     rdfs:label "tag"^^xsd:string ;
+     rdfs:comment "Relevant tags for a resource."^^xsd:string ;
+     rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+     rdfs:range xsd:string .
+
+
+
+###  http://purl.org/net/obi-wan#obsolete
+:obsolete a owl:DatatypeProperty ,
+                   owl:FunctionalProperty ;
+          rdfs:label "obsolete"^^xsd:string ;
+          rdfs:comment "True if this resource has been replaced or deleted."^^xsd:string ;
+          rdfs:isDefinedBy <http://purl.org/net/obi-wan/> ;
+          rdfs:range xsd:boolean .
+
+
+
+#################################################################
+#
+#    Individuals
+#
+#################################################################
+
+
+:nPOD_DataView a obo:IAO_0000594 , # software application
+                        owl:NamedIndividual ,
+                        owl:Thing ;
+               rdfs:label "nPOD DataView"^^xsd:string ;
+               rdfs:comment "nPOD DataView is a software application for viewing and exploring nPOD Data."^^xsd:string ;
+               rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p1BC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1BC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p1BM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1BM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1BR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1BR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p1BG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1BG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1BS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1BS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1GG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1BV"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p1GS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1GS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p1PC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1PC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p1PM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1PM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1PR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1PR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1PG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1PG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1PS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1PS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1TC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1TC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p1TM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1TM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p1TR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1TR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1TG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1TG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1TS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1TR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1YC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1YC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1YM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1YM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1YR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1YR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1YG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1YG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1YS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1YS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1IC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1IC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1IM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1IM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1IR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1IR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1IG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1IG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1IS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1IS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1OC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1OC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1OM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1OM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1OR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1OR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1OG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1OG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p1OS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1OS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p2BV a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2BV"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p2BC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1BC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p2BM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2BM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2BR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2BR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p2BG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2BG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2BS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2BS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2GG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2BV"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p2GS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2GS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p2PC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2PC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p2PM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2PM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2PR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2PR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2PG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2PG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2PS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2PS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2TC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2TC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p2TM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2TM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p2TR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2TR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2TG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2TG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2TS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2TR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2YC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2YC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2YM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2YM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2YR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2YR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2YG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2YG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2YS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2YS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2IC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2IC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2IM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2IM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2IR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2IR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2IG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2IG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2IS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2IS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2OC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2OC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2OM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2OM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2OR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2OR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2OG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2OG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p2OS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 2OS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3BV a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3BV"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3BC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 1BC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p3BM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3BM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3BR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3BR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3BG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3BG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3BS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3BS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3GG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3BV"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p3GS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3GS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p3PC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3PC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p3PM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3PM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3PR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3PR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3PG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3PG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3PS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3PS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3TC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3TC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p3TM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3TM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+:p3TR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3TR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3TG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3TG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3TS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3TR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3YC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3YC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3YM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3YM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3YR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3YR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3YG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3YG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3YS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3YS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3IC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3IC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3IM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3IM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3IR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3IR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3IG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3IG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3IS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3IS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3OC a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3OC"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3OM a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3OM"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3OR a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3OR"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3OG a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3OG"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .
+
+
+
+:p3OS a :nPOD_Open_Data_Process ,
+               owl:NamedIndividual ,
+               owl:Thing ;
+      rdfs:label "process 3OS"^^xsd:string ;
+      rdfs:comment "A specific nPOD open data processing trajectory, which is named and summarized with a 3-letter code."^^xsd:string ;
+      rdfs:seeAlso <https://osf.io/w3n4v/> ;
+      rdfs:isDefinedBy <http://purl.org/net/obi-wan/> .

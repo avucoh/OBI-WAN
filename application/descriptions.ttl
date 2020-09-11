@@ -1,0 +1,115 @@
+@prefix : <http://purl.org/net/obi-wan#> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix pav: <http://purl.org/pav/> .
+@prefix efo: <http://www.ebi.ac.uk/efo/> .
+
+
+# Properties for nPOD dataset
+:nPOD_Dataset :appRequiredProperty dct:title , rdfs:label , dct:description , :version , :namedAuthor , dct:provenance ,
+                                   :fairly , dcat:mediaType , dct:license .
+
+# When possible, there should be descriptions with these additional properties,
+# Not all datasets contain feature data, but if that's the case those fields should be calculated.
+:nPOD_Dataset :appProperty dct:title , rdfs:label , dct:description , :version , :namedAuthor , dct:provenance ,
+                           :fairly , dcat:mediaType , dct:license ,
+                           :numFeatures , :dataPoints ,
+                           :hasAuthor , :assayType , :pubSource , pav:importedFrom , prov:hadGeneration , dcat:downloadURL , dcat:theme ,
+                           dct:modified , :pubmedDate , :refSource , :authorContributedOn , :givingAuthor ,
+                           :authorNote , :curatorNote , :tag , rdfs:seeAlso .
+
+
+# Properties for nPOD features
+:nPOD_Feature :appRequiredProperty :featureID , rdfs:label , dct:description ,
+                                   :caseLinkage , :dataGrade , dct:isPartOf .
+
+:nPOD_Feature :appProperty :featureID , rdfs:label , dct:description ,
+                           :caseLinkage , :dataGrade , dct:isPartOf .
+                           :hasCase , :hasCasePool , :unit , :unitLabel , :cellTissue , :cellTissueContext ,
+                           :bioProcess , :cellComponent , :molecularFn ,
+                           :withSD, :withSEM , :withIQR , :withCI ,
+                           :usedMethod , :xfactor ,
+                           :combinableWith , :potentiallyCombinable , :derivedFrom , :hasDerivative ,
+                           :UP , :GeneID ,
+                           :authorNote , :curatorNote , :tag , rdfs:seeAlso .
+
+
+# In-app metadata labels for nPOD datasets
+dct:title :appField "title"
+rdfs:label :appField "label"
+dct:description :appField "description"
+:version :appField "version" # computed field
+:namedAuthor :appField "author(s)"
+dct:provenance :appField "provenance" # curator field
+:fairly :appField "FAIR" # computed field
+dcat:mediaType "file format" # computed field
+dct:license :appField "license" # computed field
+:numFeatures :appField "number of features" # computed field
+:dataPoints :appField "number of data points" # computed field
+:hasAuthor :appField "ORCID link"
+:assayType :appField "assay type"
+:pubSource :appField "pubmed link and/or doi link"
+pav:importedFrom :appField ""
+prov:hadGeneration :appField ""
+dcat:downloadURL :appField "download URL"
+dcat:theme :appField "theme(s)"
+dct:modified :appField "last modified" # computed field
+:pubmedDate :appField "pubmed publication date"
+:refSource :appField "reference"
+:authorContributedOn :appField "submission date"
+:givingAuthor :appField "data-submitting author"
+:authorNote :appField "author note"
+:curatorNote :appField "curator note"
+:tag :appField "tag(s)"
+rdfs:seeAlso :appField "see also" . # (links to figures or data in another form)
+
+# In-app metadata labels for nPOD features
+:featureID "Feature ID" # computed field
+rdfs:label "Feature Label"
+dct:description "Description"
+:caseLinkage "Case Linkage"
+:dataGrade "Data Grade"
+dct:isPartOf ""
+:hasCase
+:hasCasePool
+:unit
+:unitLabel
+:cellTissue "Cell or Tissue"
+:cellTissueContext "Cell or Tissue Context"
+:bioProcess
+:cellComponent
+:molecularFn
+:withSD
+:withSEM
+:withIQR
+:withCI
+:usedMethod
+:xfactor
+:combinableWith
+:potentiallyCombinable
+:derivedFrom
+:hasDerivative
+:UP
+:GeneID
+:authorNote
+:curatorNote
+:tag
+rdfs:seeAlso
+
+# Flat metadata
+rdf:type "Data type" # Data type
+rdfs:label "Feature Label"
+dct:description "Description"
+:cellTissue "Cell or Tissue"
+:cellTissueContext "Cell or Tissue Context"
+:unitLabel "Unit"
+:refSource "Reference"
+:pubSource "Publication link"
+rdfs:seeAlso # ?
